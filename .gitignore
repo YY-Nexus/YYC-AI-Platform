@@ -1,0 +1,258 @@
+# ============================================
+# 环境配置和敏感文件
+# ============================================
+
+# 本地环境文件
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+!.env.example
+
+# 敏感配置
+config/secrets.yml
+config/credentials.yml.enc
+config/master.key
+
+# ============================================
+# 密钥和证书文件
+# ============================================
+
+# SSL 证书和私钥
+ssl/
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# SSH 密钥
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.pub
+
+# ============================================
+# 日志文件
+# ============================================
+
+# 应用日志
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# 运行时常量
+*.pid
+*.seed
+*.pid.lock
+
+# ============================================
+# 运行时文件和缓存
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.js
+
+# 覆盖率目录
+coverage/
+*.lcov
+
+# 依赖目录
+jspm_packages/
+
+# 可选 npm 目录
+.npm
+.eslintcache
+
+# 微包器包管理器
+.pnp.*
+
+# ============================================
+# 依赖和构建输出
+# ============================================
+
+# 依赖目录
+node_modules/
+jspm_packages/
+
+# 构建输出
+dist/
+build/
+out/
+
+# 生产构建文件
+.next/
+.nuxt/
+
+# ============================================
+# 数据库和存储
+# ============================================
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# MySQL
+*.ibd
+*.frm
+*.myd
+*.myi
+
+# 数据库转储
+*.dump
+*.sql.gz
+backup/
+
+# ============================================
+# 编辑器和工作区文件
+# ============================================
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================================
+# 项目特定文件
+# ============================================
+
+# 共享工作区（包含用户生成内容）
+shared_workspace/*
+!shared_workspace/.gitkeep
+
+# Ollama 模型文件（可能很大）
+ollama-models/*
+!ollama-models/.gitkeep
+
+# Docker 相关
+.docker/
+docker-compose.override.yml
+
+# 临时文件
+.tmp/
+temp/
+
+# ============================================
+# 测试和调试文件
+# ============================================
+
+# 测试输出
+test-results/
+coverage/
+.nyc_output/
+
+# 调试文件
+*.pdb
+
+# ============================================
+# 包管理器锁文件（根据项目选择）
+# ============================================
+
+# 如果你在团队中工作，建议提交锁文件
+# package-lock.json
+# yarn.lock
+
+# ============================================
+# 其他
+# ============================================
+
+# 本地历史文件
+.history/
+
+# 宏文件
+*.sublime-project
+*.sublime-workspace
+
+# 复杂项目文件
+*.sass-cache
+
+# 可执行文件
+*.exe
+*.dll
+*.bin
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 文档
+*.doc
+*.docx
+*.pdf
+
+# ============================================
+# AI 开发平台特定规则
+# ============================================
+
+# 模型缓存
+ai-chat-service/model_cache/
+preview-server/model_cache/
+
+# 训练数据
+training-data/
+datasets/
+
+# 临时生成的文件
+.generated/
+.output/
+
+# 会话文件
+session/
+*.session
+
+# 上传文件
+uploads/
+*.upload
+
+# 备份文件
+backup/
+*.bak
+*.backup

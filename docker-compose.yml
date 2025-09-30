@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: ai_platform_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ai_platform
+      MYSQL_USER: ai_user
+      MYSQL_PASSWORD: ai_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ai_network
+
+  # Git服务器 (Gitea)
+  gitea:
+    image: gitea/gitea:latest
+    container_name: ai_platform_gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - gitea_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - mysql
+    networks:
+      - ai_network
+
+  # AI聊天服务
+  ai-chat:
+    build: ./ai-chat-service
+    container_name: ai_platform_chat
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ai-chat-service:/app
+      - model_cache:/app/models
+    environment:
+      - DATABASE_URL=mysql://ai_user:ai_password@mysql:3306/ai_platform
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    depends_on:
+      - mysql
+    networks:
+      - ai_network
+
+  # 可视化编程界面
+  visual-programming:
+    build: ./visual-programming
+    container_name: ai_visual_programming
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./visual-programming:/app
+      - ./shared_workspace:/app/workspace
+    environment:
+      - API_URL=http://ai-chat:8000
+      - GITEA_URL=http://gitea:3000
+    depends_on:
+      - ai-chat
+      - gitea
+    networks:
+      - ai_network
+
+  # 实时预览服务
+  preview-server:
+    build: ./preview-server
+    container_name: ai_preview_server
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./shared_workspace:/app/workspace
+      - ./preview-server:/app
+    networks:
+      - ai_network
+
+volumes:
+  mysql_data:
+  gitea_data:
+  model_cache:
+  shared_workspace:
+
+networks:
+  ai_network:
+    driver: bridge
