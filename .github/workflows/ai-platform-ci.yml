@@ -1,0 +1,40 @@
+name: AI Platform CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build AI Chat Service
+      run: docker build -t ai-chat-service:latest ./ai-chat-service
+
+    - name: Build Visual Programming Service
+      run: docker build -t visual-programming:latest ./visual-programming
+
+    - name: Build Preview Server
+      run: docker build -t preview-server:latest ./preview-server
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Check Docker Compose files
+      run: docker-compose config -q
+
+    - name: Check for sensitive information
+      run: |
+        # This is a simple check for common sensitive patterns
+        ! grep -r -E 'SECRET|KEY|PASSWORD' --exclude-dir=.git --exclude=.env .

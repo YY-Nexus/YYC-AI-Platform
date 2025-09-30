@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  ai-chat:
+    image: ${DOCKER_REGISTRY}/ai-chat-service:${TAG}
+    environment:
+      - APP_BASE_URL=https://yyc3ai.0379.email
+      - GITHUB_REDIRECT_URI=https://yyc3ai.0379.email/auth/github/callback
+      - GITHUB_WEBHOOK_URL=https://yyc3ai.0379.email/api/webhook/github
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@mysql:3306/${DB_NAME}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+
+  visual-programming:
+    image: ${DOCKER_REGISTRY}/visual-programming:${TAG}
+    environment:
+      - APP_BASE_URL=https://yyc3ai.0379.email
+      - GITHUB_APP_URL=https://github.com/apps/AI-Development-Platform
+      - GITHUB_SETUP_URL=https://yyc3ai.0379.email/auth/setup
+      - API_URL=http://ai-chat:8000
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./.github/workflows/nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    environment:
+      - SERVER_NAME=yyc3ai.0379.email
+    depends_on:
+      - ai-chat
+      - visual-programming
+  
+  # 其他服务配置...
